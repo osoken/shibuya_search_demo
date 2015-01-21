@@ -6,6 +6,10 @@
 	position: absolute;
 }
 .level-1{
+	margin: 0%;
+	z-index: 1;
+}
+.level-105{
 	margin: 3%;
 	z-index: 1;
 }
