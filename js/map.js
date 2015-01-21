@@ -4,15 +4,22 @@ var MAX_LAT = 139.702,
     MIN_LAT = 139.699;
 var MAX_LNG = 35.6589,
     MIN_LNG = 35.6584;
-var FLOOR_LEVEL = [1, 105, 2, 3]; 
+// TODO: TODO: 1〜3階固定ではなく、動的にする。
+var FLOOR_LEVEL = [1, 105, 2, 3];
+var FONT_SIZE = 12;
 
 d3.csv("data/Shibuya_Point.csv", function(error, data) {
     if (error != null) {
         console.log(err);
         return;
     }
+    // 緯度、経度の最大値、最小値を設定
+    MAX_LAT = Math.max.apply(null, data.map(function(element){return element.lat;}));
+    MIN_LAT = Math.min.apply(null, data.map(function(element){return element.lat;}));
+    MAX_LNG = Math.max.apply(null, data.map(function(element){return element.lng;}));
+    MIN_LNG = Math.min.apply(null, data.map(function(element){return element.lng;}));
+
     var floor_data = [];
-    // TODO: TODO: 1〜3階固定ではなく、動的にする。
     FLOOR_LEVEL.forEach(function(floor_level){
         // 階ごとにデータを生成
         floor_data[floor_level] = data.filter(function(element) {
@@ -28,10 +35,10 @@ d3.csv("data/Shibuya_Point.csv", function(error, data) {
             .data(floor_data[floor_level])
             .enter().append("circle")
             .attr("cx", function(d) {
-                return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * $("#floor_" + floor_level).width();
+                return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10;
             })
             .attr("cy", function(d) {
-                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * $("#floor_" + floor_level).height();
+                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - 20 ) + 10;
             })
             .attr("r", 10)
             .attr("fill", "blue")
@@ -40,15 +47,20 @@ d3.csv("data/Shibuya_Point.csv", function(error, data) {
             	selected_points.push(d);
             	console.log(selected_points); 
             });
-        // ポイントごとに名前を生成
+        // ポイントごとに名前を表示
         svg.selectAll("text")
             .data(floor_data[floor_level])
             .enter().append("text")
+            .style("font-size", FONT_SIZE + "px")
             .attr("x", function(d) {
-                return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * $("#floor_" + floor_level).width() + 10;
+            	if((d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) < 0.5){
+                	return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10 + FONT_SIZE;
+            	}else{
+            		return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10 - (d.Name.length + 1) * FONT_SIZE;
+            	}
             })
             .attr("y", function(d) {
-                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * $("#floor_" + floor_level).height();
+                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - 20 ) + 10;
             })
             .text(function(d) {
                 return d.Name;
