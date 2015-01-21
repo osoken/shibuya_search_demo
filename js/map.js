@@ -1,9 +1,9 @@
+var selected_points = [];
 // TODO: MAX, MINを動的にとる
 var MAX_LAT = 139.702,
     MIN_LAT = 139.699;
 var MAX_LNG = 35.6589,
     MIN_LNG = 35.6584;
-
 
 d3.csv("data/Shibuya_Point.csv", function(error, data) {
     if (error != null) {
@@ -27,14 +27,18 @@ d3.csv("data/Shibuya_Point.csv", function(error, data) {
             .data(floor_data[i])
             .enter().append("circle")
             .attr("cx", function(d) {
-                console.log(d);
                 return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * $("#floor_" + i).width();
             })
             .attr("cy", function(d) {
                 return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * $("#floor_" + i).height();
             })
             .attr("r", 10)
-            .attr("fill", "blue");
+            .attr("fill", "blue")
+            // ポイントごとにクリックイベントを生成
+            .on("click", function(d){ 
+            	selected_points.push(d);
+            	console.log(selected_points); 
+            });
         // ポイントごとに名前を生成
         svg.selectAll("text")
             .data(floor_data[i])
