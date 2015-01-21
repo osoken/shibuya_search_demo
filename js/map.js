@@ -7,6 +7,7 @@ var MAX_LNG = 35.6589,
 // TODO: TODO: 1〜3階固定ではなく、動的にする。
 var FLOOR_LEVEL = [1, 105, 2, 3];
 var FONT_SIZE = 12;
+var RADIUS = 10;
 
 d3.csv("data/Shibuya_Point.csv", function(error, data) {
     if (error != null) {
@@ -35,13 +36,13 @@ d3.csv("data/Shibuya_Point.csv", function(error, data) {
             .data(floor_data[floor_level])
             .enter().append("circle")
             .attr("cx", function(d) {
-                return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10;
+                return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - RADIUS * 2 ) + RADIUS;
             })
             .attr("cy", function(d) {
-                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - 20 ) + 10;
+                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - RADIUS * 2 ) + RADIUS;
             })
-            .attr("r", 10)
-            .attr("fill", "blue")
+            .attr("r", RADIUS)
+            .attr("fill", "#e74c3c")
             // ポイントごとにクリックイベントを生成
             .on("click", function(d){ 
             	selected_points.push(d);
@@ -52,15 +53,16 @@ d3.csv("data/Shibuya_Point.csv", function(error, data) {
             .data(floor_data[floor_level])
             .enter().append("text")
             .style("font-size", FONT_SIZE + "px")
+            .attr("fill", "gray")
             .attr("x", function(d) {
             	if((d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) < 0.5){
-                	return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10 + FONT_SIZE;
+                	return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - RADIUS * 2 ) + RADIUS + FONT_SIZE;
             	}else{
-            		return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - 20 ) + 10 - (d.Name.length + 1) * FONT_SIZE;
+            		return (d.lat - MIN_LAT) / (MAX_LAT - MIN_LAT) * ( $("#floor_" + floor_level).width() - RADIUS * 2 ) + RADIUS - (d.Name.length + 1) * FONT_SIZE;
             	}
             })
             .attr("y", function(d) {
-                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - 20 ) + 10;
+                return (MAX_LNG - d.lng) / (MAX_LNG - MIN_LNG) * ( $("#floor_" + floor_level).height() - RADIUS * 2 ) + RADIUS;
             })
             .text(function(d) {
                 return d.Name;

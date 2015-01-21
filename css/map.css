@@ -1,8 +1,11 @@
 .floor{
 	width: 80%;
 	height: 80%;
-	background-color: lightgray;
-	border: solid gray 1px;
+	border-radius: 1%;
+	background-color: #FFFDF6;
+	color: #e74c3c;
+	padding: .5rem;
+	border: solid #FCD1E1 1px;
 	position: absolute;
 }
 .level-1{
