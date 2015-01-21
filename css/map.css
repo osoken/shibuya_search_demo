@@ -1,0 +1,19 @@
+.floor{
+	width: 80%;
+	height: 80%;
+	background-color: lightgray;
+	border: solid gray 1px;
+	position: absolute;
+}
+.level-1{
+	margin: 2%;
+	z-index: 1;
+}
+.level-2{
+	margin: 4%;
+	z-index: 2;
+}
+.level-3{
+	margin: 6%;
+	z-index: 3;
+}
